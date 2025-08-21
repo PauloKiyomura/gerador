@@ -8,11 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="icon" type="image/png" href="dinheiro.ico"> <!-- Favicon -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -53,26 +49,17 @@
             opacity: 0.9;
         }
 
-        .content {
-            padding: 40px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
+        .content { padding: 40px; }
+        .form-group { margin-bottom: 25px; }
         .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2d3748;
+            display: block; margin-bottom: 8px;
+            font-weight: 600; color: #2d3748;
             font-size: 1.1rem;
         }
 
         .form-group input,
         .form-group select {
-            width: 100%;
-            padding: 15px;
+            width: 100%; padding: 15px;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
             font-size: 1.1rem;
@@ -88,16 +75,11 @@
 
         .btn-emitir {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 20px;
+            color: white; border: none;
+            padding: 18px 40px; border-radius: 12px;
+            font-size: 1.2rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease;
+            width: 100%; margin-top: 20px;
         }
 
         .btn-emitir:hover {
@@ -105,150 +87,69 @@
             box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
         }
 
-        .btn-emitir:active {
-            transform: translateY(0);
-        }
-
         .comprovante {
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            margin-top: 30px;
+            background: white; border-radius: 15px;
+            padding: 40px; margin-top: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             display: none;
         }
-
-        .comprovante.visible {
-            display: block;
-        }
+        .comprovante.visible { display: block; }
 
         .comprovante-header {
-            text-align: center;
-            margin-bottom: 30px;
+            text-align: center; margin-bottom: 30px;
             border-bottom: 3px solid #4facfe;
             padding-bottom: 20px;
         }
 
         .comprovante-header h3 {
-            font-size: 2rem;
-            color: #2d3748;
-            margin-bottom: 10px;
+            font-size: 2rem; color: #2d3748; margin-bottom: 10px;
         }
-
-        .comprovante-header p {
-            color: #718096;
-            font-size: 1.1rem;
-        }
-
-        .dados-pagamento {
-            margin-bottom: 30px;
-        }
+        .comprovante-header p { color: #718096; font-size: 1.1rem; }
 
         .dado-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding: 12px 0;
+            display: flex; justify-content: space-between;
+            margin-bottom: 15px; padding: 12px 0;
             border-bottom: 1px solid #e2e8f0;
         }
-
-        .dado-item:last-child {
-            border-bottom: none;
-        }
-
-        .dado-label {
-            font-weight: 600;
-            color: #4a5568;
-        }
-
-        .dado-valor {
-            color: #2d3748;
-            font-weight: 500;
-        }
+        .dado-item:last-child { border-bottom: none; }
+        .dado-label { font-weight: 600; color: #4a5568; }
+        .dado-valor { color: #2d3748; font-weight: 500; }
 
         .valor-total {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
+            color: white; padding: 20px;
+            border-radius: 12px; text-align: center;
             margin-top: 20px;
         }
-
-        .valor-total .label {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-
-        .valor-total .valor {
-            font-size: 2rem;
-            font-weight: bold;
-        }
+        .valor-total .label { font-size: 1.1rem; margin-bottom: 5px; }
+        .valor-total .valor { font-size: 2rem; font-weight: bold; }
 
         .assinatura {
-            margin-top: 40px;
-            text-align: center;
-            border-top: 2px solid #e2e8f0;
-            padding-top: 20px;
+            margin-top: 40px; text-align: center;
+            border-top: 2px solid #e2e8f0; padding-top: 20px;
         }
-
-        .assinatura p {
-            color: #718096;
-            font-style: italic;
-        }
-
+        .assinatura p { color: #718096; font-style: italic; }
 
         @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .header h2 {
-                font-size: 1.1rem;
-            }
-            
-            .content {
-                padding: 20px;
-            }
-            
-            .form-group input,
-            .form-group select {
-                padding: 12px;
-            }
-            
-            .btn-emitir {
-                padding: 15px 30px;
-            }
+            .container { margin: 10px; }
+            .header h1 { font-size: 2rem; }
+            .header h2 { font-size: 1.1rem; }
+            .content { padding: 20px; }
+            .form-group input, .form-group select { padding: 12px; }
+            .btn-emitir { padding: 15px 30px; }
         }
 
-        .loading {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .loading.visible {
-            display: block;
-        }
-
+        .loading { display: none; text-align: center; margin-top: 20px; }
+        .loading.visible { display: block; }
         .spinner {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #4facfe;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             animation: spin 1s linear infinite;
             margin: 0 auto;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
     </style>
 </head>
 <body>
@@ -326,36 +227,27 @@
 
                 <div class="assinatura">
                     <p>___________________________</p>
-                    <div class="assinatura-linha"></div>
                     <p>Natalia Ferreira - Psicopedagoga clínica e institucional</p>
                     <p>ABPq - 1651</p>
-                    
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-    // Configurar data atual como padrão corrigindo o fuso horário
+    // Configurar data atual
     const hoje = new Date();
     hoje.setMinutes(hoje.getMinutes() - hoje.getTimezoneOffset());
     document.getElementById('data').valueAsDate = hoje;
 
     function formatarMoeda(valor) {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        }).format(valor);
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
     }
 
     function formatarData(data) {
         const d = new Date(data);
-        d.setMinutes(d.getMinutes() + d.getTimezoneOffset()); // evita erro de 1 dia a menos
-        return d.toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
+        d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
+        return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
 
     function gerarComprovante() {
@@ -364,66 +256,58 @@
         const meioPagamento = document.getElementById('meioPagamento').value;
         const data = document.getElementById('data').value;
 
-        // Validação
         if (!nome || isNaN(valor) || valor <= 0 || !meioPagamento || !data) {
             alert('Por favor, preencha todos os campos corretamente.');
             return;
         }
 
-        // Mostrar loading
         document.getElementById('loading').classList.add('visible');
 
-        // Preencher comprovante
         document.getElementById('comp-nome').textContent = nome;
         document.getElementById('comp-valor').textContent = formatarMoeda(valor);
         document.getElementById('comp-meio').textContent = meioPagamento;
         document.getElementById('comp-data').textContent = formatarData(data);
         document.getElementById('comp-valor-total').textContent = formatarMoeda(valor);
 
-        // Mostrar comprovante após pequeno delay
         setTimeout(() => {
             document.getElementById('comprovante').classList.add('visible');
             document.getElementById('loading').classList.remove('visible');
             gerarPDF();
         }, 500);
     }
-function gerarPDF() {
-    const { jsPDF } = window.jspdf;
-    const comprovante = document.getElementById('comprovante');
 
-    html2canvas(comprovante, {
-        scale: 2,
-        useCORS: true,
-        logging: false
-    }).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
+    function gerarPDF() {
+        const { jsPDF } = window.jspdf;
+        const comprovante = document.getElementById('comprovante');
 
-        // mantém a proporção mas garante que caiba em UMA folha
-        const imgWidth = pageWidth - 20; // margens
-        const imgHeight = canvas.height * imgWidth / canvas.width;
+        html2canvas(comprovante, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            windowWidth: comprovante.scrollWidth,
+            windowHeight: comprovante.scrollHeight
+        }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = pdf.internal.pageSize.getWidth();
 
-        let posY = (pageHeight - imgHeight) / 2; // centralizar verticalmente
+            const imgWidth = pageWidth - 20; // margem lateral
+            const imgHeight = canvas.height * imgWidth / canvas.width;
 
-        pdf.addImage(imgData, 'PNG', 10, posY, imgWidth, imgHeight);
+            const posY = 10; // margem superior (título sempre no topo)
 
-        const nomeArquivo = `Comprovante_${document.getElementById('nome').value.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`;
-        pdf.save(nomeArquivo);
-    });
-}
-   
+            pdf.addImage(imgData, 'PNG', 10, posY, imgWidth, imgHeight);
 
-    // Formatação automática do valor monetário
+            const nomeArquivo = `Comprovante_${document.getElementById('nome').value.replace(/\s+/g, '_')}.pdf`;
+            pdf.save(nomeArquivo);
+        });
+    }
+
     document.getElementById('valor').addEventListener('input', function(e) {
         let value = e.target.value.replace(/\D/g, '');
         value = (value / 100).toFixed(2);
         e.target.value = value;
     });
-</script>
-
+    </script>
 </body>
 </html>
-
