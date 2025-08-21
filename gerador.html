@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Comprovante - Natália Ferreira</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="icon" type="image/png" href="dinheiro.ico"> <!-- Favicon -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h2 {
+            font-size: 1.3rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .btn-emitir {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-emitir:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn-emitir:active {
+            transform: translateY(0);
+        }
+
+        .comprovante {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .comprovante.visible {
+            display: block;
+        }
+
+        .comprovante-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #4facfe;
+            padding-bottom: 20px;
+        }
+
+        .comprovante-header h3 {
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .comprovante-header p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+
+        .dados-pagamento {
+            margin-bottom: 30px;
+        }
+
+        .dado-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dado-item:last-child {
+            border-bottom: none;
+        }
+
+        .dado-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .dado-valor {
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .valor-total {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .valor-total .label {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .valor-total .valor {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .assinatura {
+            margin-top: 40px;
+            text-align: center;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 20px;
+        }
+
+        .assinatura p {
+            color: #718096;
+            font-style: italic;
+        }
+
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header h2 {
+                font-size: 1.1rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .form-group input,
+            .form-group select {
+                padding: 12px;
+            }
+            
+            .btn-emitir {
+                padding: 15px 30px;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading.visible {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>COMPROVANTE DE PAGAMENTO</h1>
+            <h2>ATENDIMENTO NATALIA FERREIRA PSICOPEDAGOGA</h2>
+        </div>
+
+        <div class="content">
+            <div class="form-group">
+                <label for="nome">NOME:</label>
+                <input type="text" id="nome" placeholder="Digite o nome completo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="valor">VALOR (R$):</label>
+                <input type="number" id="valor" placeholder="0,00" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="meioPagamento">MEIO DE PAGAMENTO:</label>
+                <select id="meioPagamento" required>
+                    <option value="">Selecione o meio de pagamento</option>
+                    <option value="PIX">PIX</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Cartão de Débito">Cartão de Débito</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Transferência Bancária">Transferência Bancária</option>
+                    <option value="Boleto Bancário">Boleto Bancário</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="data">DATA:</label>
+                <input type="date" id="data" required>
+            </div>
+
+            <button class="btn-emitir" onclick="gerarComprovante()">EMITIR COMPROVANTE</button>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px;">Gerando comprovante...</p>
+            </div>
+
+            <div class="comprovante" id="comprovante">
+                <div class="comprovante-header">
+                    <h3>COMPROVANTE DE PAGAMENTO</h3>
+                    <p>ATENDIMENTO NATALIA FERREIRA PSICOPEDAGOGA</p>
+                </div>
+
+                <div class="dados-pagamento">
+                    <div class="dado-item">
+                        <span class="dado-label">NOME:</span>
+                        <span class="dado-valor" id="comp-nome"></span>
+                    </div>
+                    <div class="dado-item">
+                        <span class="dado-label">VALOR:</span>
+                        <span class="dado-valor" id="comp-valor"></span>
+                    </div>
+                    <div class="dado-item">
+                        <span class="dado-label">MEIO DE PAGAMENTO:</span>
+                        <span class="dado-valor" id="comp-meio"></span>
+                    </div>
+                    <div class="dado-item">
+                        <span class="dado-label">DATA:</span>
+                        <span class="dado-valor" id="comp-data"></span>
+                    </div>
+                </div>
+
+                <div class="valor-total">
+                    <div class="label">VALOR TOTAL PAGO</div>
+                    <div class="valor" id="comp-valor-total"></div>
+                </div>
+
+                <div class="assinatura">
+                    <p>___________________________</p>
+                    <div class="assinatura-linha"></div>
+                    <p>Natalia Ferreira - Psicopedagoga clínica e institucional</p>
+                    <p>ABPq - 1651</p>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Configurar data atual como padrão corrigindo o fuso horário
+    const hoje = new Date();
+    hoje.setMinutes(hoje.getMinutes() - hoje.getTimezoneOffset());
+    document.getElementById('data').valueAsDate = hoje;
+
+    function formatarMoeda(valor) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(valor);
+    }
+
+    function formatarData(data) {
+        const d = new Date(data);
+        d.setMinutes(d.getMinutes() + d.getTimezoneOffset()); // evita erro de 1 dia a menos
+        return d.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    }
+
+    function gerarComprovante() {
+        const nome = document.getElementById('nome').value.trim();
+        const valor = parseFloat(document.getElementById('valor').value);
+        const meioPagamento = document.getElementById('meioPagamento').value;
+        const data = document.getElementById('data').value;
+
+        // Validação
+        if (!nome || isNaN(valor) || valor <= 0 || !meioPagamento || !data) {
+            alert('Por favor, preencha todos os campos corretamente.');
+            return;
+        }
+
+        // Mostrar loading
+        document.getElementById('loading').classList.add('visible');
+
+        // Preencher comprovante
+        document.getElementById('comp-nome').textContent = nome;
+        document.getElementById('comp-valor').textContent = formatarMoeda(valor);
+        document.getElementById('comp-meio').textContent = meioPagamento;
+        document.getElementById('comp-data').textContent = formatarData(data);
+        document.getElementById('comp-valor-total').textContent = formatarMoeda(valor);
+
+        // Mostrar comprovante após pequeno delay
+        setTimeout(() => {
+            document.getElementById('comprovante').classList.add('visible');
+            document.getElementById('loading').classList.remove('visible');
+            gerarPDF();
+        }, 500);
+    }
+
+    function gerarPDF() {
+        const { jsPDF } = window.jspdf;
+        const comprovante = document.getElementById('comprovante');
+
+        html2canvas(comprovante, {
+            scale: 2,
+            useCORS: true,
+            logging: false
+        }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const imgWidth = 190;
+            const pageHeight = 295;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            let heightLeft = imgHeight;
+            let position = 10;
+
+            pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft >= 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            const nomeArquivo = `Comprovante_${document.getElementById('nome').value.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`;
+            pdf.save(nomeArquivo);
+        });
+    }
+
+    // Formatação automática do valor monetário
+    document.getElementById('valor').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        value = (value / 100).toFixed(2);
+        e.target.value = value;
+    });
+</script>
+
+</body>
+</html>
+
