@@ -387,38 +387,34 @@
             gerarPDF();
         }, 500);
     }
+function gerarPDF() {
+    const { jsPDF } = window.jspdf;
+    const comprovante = document.getElementById('comprovante');
 
-    function gerarPDF() {
-        const { jsPDF } = window.jspdf;
-        const comprovante = document.getElementById('comprovante');
+    html2canvas(comprovante, {
+        scale: 2,
+        useCORS: true,
+        logging: false
+    }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
 
-        html2canvas(comprovante, {
-            scale: 2,
-            useCORS: true,
-            logging: false
-        }).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const imgWidth = 190;
-            const pageHeight = 295;
-            const imgHeight = canvas.height * imgWidth / canvas.width;
-            let heightLeft = imgHeight;
-            let position = 10;
+        // mantém a proporção mas garante que caiba em UMA folha
+        const imgWidth = pageWidth - 20; // margens
+        const imgHeight = canvas.height * imgWidth / canvas.width;
 
-            pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
+        let posY = (pageHeight - imgHeight) / 2; // centralizar verticalmente
 
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-            }
+        pdf.addImage(imgData, 'PNG', 10, posY, imgWidth, imgHeight);
 
-            const nomeArquivo = `Comprovante_${document.getElementById('nome').value.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`;
-            pdf.save(nomeArquivo);
-        });
-    }
+        const nomeArquivo = `Comprovante_${document.getElementById('nome').value.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`;
+        pdf.save(nomeArquivo);
+    });
+}
+   
 
     // Formatação automática do valor monetário
     document.getElementById('valor').addEventListener('input', function(e) {
